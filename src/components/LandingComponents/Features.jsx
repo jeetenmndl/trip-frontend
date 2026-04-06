@@ -2,6 +2,8 @@ import React from 'react'
 import FeaturesCard from '../common/FeaturesCard'
 import { PhoneCall, ShieldCheck, Smile, Zap } from 'lucide-react'
 
+import {Button} from "@/components/ui/button"
+
 const Features = () => {
 
   let featuresData = [
@@ -32,6 +34,8 @@ const Features = () => {
       {/* heading */}
       <div>
         <h2 className='text-5xl font-bold text-center mb-16'>Our Features</h2>
+        
+          <Button variant="ghost" size="sm">Hello</Button>
       </div>
 
       {/* content  */}
