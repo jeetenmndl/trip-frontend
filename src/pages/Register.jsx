@@ -14,6 +14,9 @@ import {
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import api from '@/api/axios'
+import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 const formSchema = z.object({
     name: z.string().min(3, "Name must be at least 3 characters"),
@@ -31,6 +34,8 @@ const formSchema = z.object({
 
 const Register = () => {
 
+    const navigate = useNavigate();
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -41,8 +46,27 @@ const Register = () => {
         }
     })
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log(data)
+        const newData = {
+            name: data.name,
+            email: data.email,
+            password: data.password
+        }
+        try{
+            const response = await api.post("/auth/register", newData);
+            console.log(response);  
+
+            if(response.status === 201){
+                toast.success("Registration Successful!")
+                navigate("/login");
+            }else{
+                toast.error("Registration failed. Please try again.")
+            }
+        }catch (error){
+            console.error("Registration failed:", error);
+            toast.error("Registration failed. Please try again.")
+        }
     }
 
     return (
@@ -104,8 +128,13 @@ const Register = () => {
                     />
                 </CardContent>
 
-                <CardFooter>
+                <CardFooter className="block">
                     <Button size="lg" className="w-full" type="submit">Submit</Button>
+
+                    <div className='mt-4 text-center'>
+                        Already have an account?  
+                        <a className='text-blue-600 font-medium hover:underline ml-2' href="/login">Login</a>
+                    </div>
                 </CardFooter>
 
             </Card>
