@@ -16,7 +16,8 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import api from '@/api/axios'
 import { toast } from 'sonner'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
+import useAuth from '@/hooks/useAuth'
 
 const formSchema = z.object({
     name: z.string().min(3, "Name must be at least 3 characters"),
@@ -35,6 +36,14 @@ const formSchema = z.object({
 const Register = () => {
 
     const navigate = useNavigate();
+
+    const {token} = useAuth();
+
+    if(token){
+        return (
+            <Navigate to="/dashboard" />
+        )
+    }
 
     const form = useForm({
         resolver: zodResolver(formSchema),
