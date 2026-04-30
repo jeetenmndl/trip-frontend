@@ -78,7 +78,8 @@ const Login = () => {
                            render={({ field, fieldState }) => (
                                <Field data-invalid={fieldState.invalid}>
                                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                                   <Input type="email" placeholder="abc@gmail.com" {...field} id={field.name} aria-invalid={fieldState.invalid} />
+                                   <Input type="email" placeholder="abc@gmail.com" {...field} id={field.name} aria-invalid={fieldState.invalid}
+                                   required />
                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                                </Field>
                            )}

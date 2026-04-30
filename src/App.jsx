@@ -51,7 +51,7 @@ const { token, logout } = useAuth();
         <Route path="/login" element={<Login />} />
 
         <Route element={<ProtectedRoutes />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
         </Route>
 
       </Routes>
