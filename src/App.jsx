@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard'
 import useAuth from './hooks/useAuth'
 import { jwtDecode } from 'jwt-decode'
 import AppLayout from './layouts/AppLayout'
+import AddTrip from './pages/trip/AddTrip'
+import EditTrip from './pages/trip/EditTrip'
 
 const App = () => {
 
@@ -52,6 +54,8 @@ const { token, logout } = useAuth();
 
         <Route element={<ProtectedRoutes />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/trips/add" element={<AddTrip />} />
+            <Route path="/trips/edit/:id" element={<EditTrip />} />
         </Route>
 
       </Routes>
