@@ -11,8 +11,18 @@ const EditTrip = () => {
 
     const { data, error, loading } = useApi(`/trips/${tripId}`);
 
+    if(error){
+        console.error(error);
+    }
+
     if(loading){
         return <div>Loading...</div>
+    }
+
+    const newData = {
+        ...data,
+        startDate: data.startDate.split('T')[0],
+        endDate: data.endDate.split('T')[0]
     }
 
   return (
@@ -26,7 +36,7 @@ const EditTrip = () => {
             </CardDescription>
         </CardHeader>
         <CardContent>
-            <TripForm tripData={data} />
+            <TripForm tripData={newData} />
         </CardContent>
     </Card>
   )

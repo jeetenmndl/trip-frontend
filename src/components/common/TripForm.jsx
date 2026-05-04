@@ -52,7 +52,7 @@ const TripForm = ({tripData}) => {
     }
   })
 
-  const onSubmit = async (data) => {
+  const onAdd = async (data) => {
     console.log(data)
     try {
       const response = await api.post("/trips", data);
@@ -69,8 +69,25 @@ const TripForm = ({tripData}) => {
     }
   }
 
+    const onEdit = async (data) => {
+    console.log(data)
+    try {
+      const response = await api.put(`/trips/${tripData._id}`, data);
+      console.log(response);
+      if(response.status === 200){
+        toast.success("Trip updated successfully!");
+        navigate("/trips");
+      }else{
+        toast.error("Failed to update trip. Please try again.");
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message || "An error occurred while updating the trip. Please try again.");
+    }
+  }
+
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form onSubmit={form.handleSubmit(tripData ? onEdit : onAdd)}>
       <Card>
         <CardHeader>
           <CardTitle>Trip Info</CardTitle>
