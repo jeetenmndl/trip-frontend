@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Edit, Plus, Trash2 } from 'lucide-react';
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     Card,
@@ -13,19 +13,39 @@ import {
 } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import useApi from '@/hooks/useApi';
+import api from '@/api/axios';
+import { toast } from 'sonner';
 
 const Trips = () => {
     const navigate = useNavigate();
+
+    const [dependency, setDependency] = useState(0);
 
     function formatDate(isoString) {
         const date = new Date(isoString);
         return date.toDateString();
     }
 
-    const { data, error, loading } = useApi('/trips');
+    const { data, error, loading } = useApi('/trips', {}, [dependency]);
 
     if (loading) {
         return <div>Loading...</div>
+    }
+
+    const handleDelete = async (tripId) => {
+        try {
+            const response = await api.delete(`/trips/${tripId}`);
+            console.log(response);
+            if (response.status === 200) {
+                toast.success("Trip deleted successfully!");
+                setDependency( prev => prev + 1); 
+            } else {
+                toast.error("Failed to delete trip. Please try again.");
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message || "An error occurred while deleting the trip. Please try again.");
+        }
     }
 
     return (
@@ -57,6 +77,9 @@ const Trips = () => {
                         </TableHeader>
                         <TableBody>
                             {
+                                data && data.length == 0 ?
+                                <div className='text-center py-10'>No trips found. Please add some trips.</div>
+                                :
                                 data.map((trip, index) => {
                                     return (
                                         <TableRow key={trip._id}>
@@ -70,9 +93,13 @@ const Trips = () => {
                                             <TableCell>{trip.availableSeats} available (Max: {trip.maxParticipants})</TableCell>
 
                                             <TableCell className={"space-x-2"}>
-                                                <Button size='icon' variant='outline' className={"text-blue-600 hover:bg-blue-50"}><Edit className='text-blue-600' /></Button>
+                                                <Button 
+                                                onClick={()=>{navigate(`/trips/edit/${trip._id}`)}}
+                                                size='icon' variant='outline' className={"text-blue-600 hover:bg-blue-50"}><Edit className='text-blue-600' /></Button>
 
-                                                <Button size='icon' variant='outline' className={"hover:bg-red-50"}><Trash2 className='text-red-600' /></Button>
+                                                <Button
+                                                onClick={()=>{handleDelete(trip._id)}}
+                                                size='icon' variant='outline' className={"hover:bg-red-50"}><Trash2 className='text-red-600' /></Button>
                                             </TableCell>
 
                                         </TableRow>

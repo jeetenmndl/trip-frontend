@@ -72,7 +72,7 @@ const TripForm = ({tripData}) => {
     const onEdit = async (data) => {
     console.log(data)
     try {
-      const response = await api.put(`/trips/${tripData._id}`, data);
+      const response = await api.patch(`/trips/${tripData._id}`, data);
       console.log(response);
       if(response.status === 200){
         toast.success("Trip updated successfully!");
