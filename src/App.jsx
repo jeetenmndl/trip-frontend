@@ -11,6 +11,7 @@ import AppLayout from './layouts/AppLayout'
 import AddTrip from './pages/trip/AddTrip'
 import EditTrip from './pages/trip/EditTrip'
 import Trips from './pages/trip/Trips'
+import ViewTrips from './pages/client/ViewTrips'
 
 const App = () => {
 
@@ -20,6 +21,8 @@ const { token, logout } = useAuth();
     try {
       const decodedToken = token ? jwtDecode(token) : null;
       const userId = decodedToken?.userId;
+
+      console.log("Decoded Token:", decodedToken);
 
 
       if (decodedToken && decodedToken.exp) {
@@ -37,7 +40,7 @@ const { token, logout } = useAuth();
       }
 
 
-      return <AppLayout />;
+      return <AppLayout role={decodedToken.role} />;
     } catch (err) {
       console.error(err);
       logout();
@@ -58,6 +61,8 @@ const { token, logout } = useAuth();
             <Route path="/trips/add" element={<AddTrip />} />
             <Route path="/trips/edit/:id" element={<EditTrip />} />
             <Route path="/trips" element={<Trips />} />
+
+            <Route path="/client/trips" element={<ViewTrips />} />
         </Route>
 
       </Routes>

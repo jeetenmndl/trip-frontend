@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Edit, Plus, Trash2 } from 'lucide-react';
+import { Edit, Eye, Plus, Trash2 } from 'lucide-react';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -15,6 +15,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import useApi from '@/hooks/useApi';
 import api from '@/api/axios';
 import { toast } from 'sonner';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 
 const Trips = () => {
     const navigate = useNavigate();
@@ -38,7 +46,7 @@ const Trips = () => {
             console.log(response);
             if (response.status === 200) {
                 toast.success("Trip deleted successfully!");
-                setDependency( prev => prev + 1); 
+                setDependency(prev => prev + 1);
             } else {
                 toast.error("Failed to delete trip. Please try again.");
             }
@@ -78,33 +86,52 @@ const Trips = () => {
                         <TableBody>
                             {
                                 data && data.length == 0 ?
-                                <div className='text-center py-10'>No trips found. Please add some trips.</div>
-                                :
-                                data.map((trip, index) => {
-                                    return (
-                                        <TableRow key={trip._id}>
-                                            <TableCell>{index + 1}</TableCell>
-                                            <TableCell>{trip.title}</TableCell>
-                                            <TableCell>रु {trip.price}</TableCell>
-                                            <TableCell>{formatDate(trip.startDate)}</TableCell>
+                                    <div className='text-center py-10'>No trips found. Please add some trips.</div>
+                                    :
+                                    data.map((trip, index) => {
+                                        return (
+                                            <TableRow key={trip._id}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell>{trip.title}</TableCell>
+                                                <TableCell>रु {trip.price}</TableCell>
+                                                <TableCell>{formatDate(trip.startDate)}</TableCell>
 
-                                            <TableCell>{trip.duration.days} days {trip.duration.nights} nights</TableCell>
+                                                <TableCell>{trip.duration.days} days {trip.duration.nights} nights</TableCell>
 
-                                            <TableCell>{trip.availableSeats} available (Max: {trip.maxParticipants})</TableCell>
+                                                <TableCell>{trip.availableSeats} available (Max: {trip.maxParticipants})</TableCell>
 
-                                            <TableCell className={"space-x-2"}>
-                                                <Button 
-                                                onClick={()=>{navigate(`/trips/edit/${trip._id}`)}}
-                                                size='icon' variant='outline' className={"text-blue-600 hover:bg-blue-50"}><Edit className='text-blue-600' /></Button>
+                                                <TableCell className={"space-x-2"}>
+                                                    
+                                                <Dialog>
+                                                    <DialogTrigger>
+                                                        <Button variant='outline' size='icon'>
+                                                            <Eye />
+                                                        </Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent>
+                                                        <DialogHeader>
+                                                            <DialogTitle>{trip.title}</DialogTitle>
+                                                            <DialogDescription>
+                                                                {trip.description}
+                                                            </DialogDescription>
+                                                        </DialogHeader>
+                                                        
+                                                    </DialogContent>
+                                                </Dialog>
 
-                                                <Button
-                                                onClick={()=>{handleDelete(trip._id)}}
-                                                size='icon' variant='outline' className={"hover:bg-red-50"}><Trash2 className='text-red-600' /></Button>
-                                            </TableCell>
 
-                                        </TableRow>
-                                    )
-                                })
+                                                    <Button
+                                                        onClick={() => { navigate(`/trips/edit/${trip._id}`) }}
+                                                        size='icon' variant='outline' className={"text-blue-600 hover:bg-blue-50"}><Edit className='text-blue-600' /></Button>
+
+                                                    <Button
+                                                        onClick={() => { handleDelete(trip._id) }}
+                                                        size='icon' variant='outline' className={"hover:bg-red-50"}><Trash2 className='text-red-600' /></Button>
+                                                </TableCell>
+
+                                            </TableRow>
+                                        )
+                                    })
                             }
                         </TableBody>
                     </Table>
