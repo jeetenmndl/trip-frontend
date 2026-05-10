@@ -20,6 +20,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import api from "@/api/axios"
+import { toast } from "sonner"
 
 const ViewTrips = () => {
 
@@ -27,6 +31,33 @@ const ViewTrips = () => {
 
   if (loading) {
     return <div>Loading...</div>
+  }
+
+  const onSubmit = async (tripId) => {
+
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const numberOfPeople = document.getElementById("numberOfPeople").value;
+
+    const data = {
+      customerEmail: email,
+      customerPhone: phone,
+      numberOfPeople: numberOfPeople,
+      tripId: tripId
+    }
+
+    try{
+      const response = await api.post("/booking", data);
+
+      if(response.status === 201){
+        toast.success("Booking created successfully!!")
+      }else{
+        toast.error("Some error occured.")
+      }
+    }catch(error){
+      toast.error(error.message || "Some error occured.")
+    }
+
   }
 
   return (
@@ -96,14 +127,29 @@ const ViewTrips = () => {
                         <Button size="lg" className="w-full">Book Trip</Button>
                       </DialogTrigger>
                       <DialogContent>
-                        <DialogHeader>
+                        <DialogHeader className={"border-b pb-2"}>
                           <DialogTitle>Enter Contact Information</DialogTitle>
                           <DialogDescription>
                             Please provide your contact details and number of participants to book this trip.
                           </DialogDescription>
                         </DialogHeader>
 
-                      
+                      <form>
+                        <div className="space-y-2 mb-4">
+                          <Label htmlFor="email">Email</Label>
+                          <Input id="email" type="email" placeholder="abc@gmail.com" />
+                        </div>
+                        <div className="space-y-2 mb-4">
+                          <Label htmlFor="phone">Phone</Label>
+                          <Input id="phone" placeholder="9812345678" />
+                        </div>
+                          <div className="space-y-2 mb-4">
+                          <Label htmlFor="numberOfPeople">Number of People</Label>
+                          <Input id="numberOfPeople" type="number" placeholder="2" />
+                        </div>
+
+                        <Button type="button" onClick={()=>{onSubmit(trip._id)}} className={"w-full"} size="lg">Confirm</Button>
+                      </form>
 
                       </DialogContent>
                     </Dialog>
