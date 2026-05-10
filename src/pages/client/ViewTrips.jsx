@@ -11,6 +11,15 @@ import useApi from '@/hooks/useApi'
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { MapPin, Calendar, Users, DollarSign } from 'lucide-react'
+import { formatDate } from "@/lib/formatter"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 const ViewTrips = () => {
 
@@ -31,12 +40,12 @@ const ViewTrips = () => {
             :
             data.map((trip, index) => {
               return (
-                <Card>
+                <Card key={trip._id}>
                   <CardHeader className="border-b">
-                    <div>
+                    <div className="mb-2">
                       <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="trip image" className="rounded-md" />
                     </div>
-                    <CardTitle>{trip.title}</CardTitle>
+                    <CardTitle className="text-xl font-bold">{trip.title}</CardTitle>
                     <CardDescription>{trip.description}</CardDescription>
 
                   </CardHeader>
@@ -52,7 +61,7 @@ const ViewTrips = () => {
 
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                          <span className="text-foreground">{trip.startDate}</span>
+                          <span className="text-foreground">{formatDate(trip.startDate)}</span>
                         </div>
 
                         {/* Duration and Availability */}
@@ -65,7 +74,7 @@ const ViewTrips = () => {
                           </div>
                           <div className="flex items-center gap-2 text-sm">
                             <Users className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                            <span className={ (trip.availableSeats === 0) ? 'text-red-500 font-medium' : 'text-foreground'}>
+                            <span className={(trip.availableSeats === 0) ? 'text-red-500 font-medium' : 'text-foreground'}>
                               {trip.availableSeats} left
                             </span>
                           </div>
@@ -73,17 +82,31 @@ const ViewTrips = () => {
 
                         {/* Price */}
                         <div className="flex items-center gap-2">
-                          <DollarSign className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                           <span className="text-xl font-bold text-foreground">
-                            ${trip.price}
+                            रू {trip.price}
                           </span>
                           <span className="text-xs text-muted-foreground">per person</span>
                         </div>
                       </div>
-                      </div>
+                    </div>
                   </CardContent>
                   <CardFooter>
-                    <p>Card Footer</p>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button size="lg" className="w-full">Book Trip</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Enter Contact Information</DialogTitle>
+                          <DialogDescription>
+                            Please provide your contact details and number of participants to book this trip.
+                          </DialogDescription>
+                        </DialogHeader>
+
+                      
+
+                      </DialogContent>
+                    </Dialog>
                   </CardFooter>
                 </Card>
               )
