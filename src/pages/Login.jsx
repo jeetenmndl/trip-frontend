@@ -18,6 +18,7 @@ import api from '@/api/axios'
 import { toast } from 'sonner'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useAuth from '@/hooks/useAuth'
+import { jwtDecode } from 'jwt-decode'
 
 const formSchema = z.object({
     email: z.string().email().min(5, "Email must be atleast 5 characters"),
@@ -30,8 +31,10 @@ const Login = () => {
     const { token, login } = useAuth();
 
     if(token){
+        const decodedToken = token ? jwtDecode(token) : null;
+
         return (
-            <Navigate to="/dashboard" />
+            <Navigate to={decodedToken.role === "admin" ? "/dashboard" : "/client/dashboard"} />
         )
     }
 
@@ -52,7 +55,14 @@ const Login = () => {
             if(response.status === 200){
                 toast.success("Login Successful!")
                 login(data, response.data.accessToken)
-                navigate("/dashboard");
+
+                 const decodedToken =  response.data.accessToken ? jwtDecode(response.data.accessToken) : null;
+
+                 if(decodedToken.role === "admin"){
+                    navigate("/dashboard");
+                 }else{
+                    navigate("/client/dashboard");
+                 }
             }else{
                 toast.error("Login failed. Please try again.")
             }

@@ -4,7 +4,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 
 const AppLayout = ({role}) => {
 
-  const adminRoutes = ['/dashboard', '/trips', '/trips/add', '/trips/edit/:id'];
+  const adminRoutes = ['/dashboard', '/trips', '/trips/add', '/trips/edit/:id', '/bookings'];
   const clientRoutes = ['/client/dashboard', '/client/trips'];
 
   const pathname = useLocation().pathname;
