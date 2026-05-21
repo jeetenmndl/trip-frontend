@@ -33,6 +33,7 @@ const AppNavbar = () => {
                 <a href="/dashboard">Dashboard</a>
                 <a href="/trips">Trips</a>
                 <a href="/bookings">Bookings</a>
+                <a href="/contact-list">Contact List</a>
                 <a href="/blogs">Blogs</a>
               </>
               :
