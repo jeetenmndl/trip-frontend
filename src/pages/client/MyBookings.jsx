@@ -42,7 +42,7 @@ const MyBookings = () => {
     }
 
     return (
-        <main className="px-20 py-8">
+        <main className="px-4 md:px-10 lg:px-20 py-4 md:py-8">
             <Card>
                 <CardHeader className="border-b">
                     <CardTitle>My Bookings</CardTitle>

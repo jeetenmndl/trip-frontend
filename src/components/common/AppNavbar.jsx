@@ -17,15 +17,15 @@ const AppNavbar = () => {
   const decodedToken = token ? jwtDecode(token) : null;
 
   return (
-    <header className='px-20 py-6 flex items-center justify-between'>
+    <header className='px-4 md:px-10 lg:px-20 py-3 md:py-6 flex items-center justify-between'>
       {/* left part */}
       <div>
-        <h1 className='text-4xl font-semibold'>CloveTrip</h1>
+        <h1 className='text-2xl md:text-4xl font-semibold'>CloveTrip</h1>
       </div>
 
       {/* right part */}
       <div className='flex items-center gap-16'>
-        <nav className='space-x-8 text-lg text-gray-600 font-medium [&>a]:hover:text-black [&>a]:hover:underline '>
+        <nav className='hidden md:block space-x-8 text-lg text-gray-600 font-medium [&>a]:hover:text-black [&>a]:hover:underline '>
 
           {
             decodedToken.role === "admin" ?
